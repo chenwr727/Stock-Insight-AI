@@ -19,16 +19,16 @@ class FuturesDataFetcher(DataFetcher):
     def __fetch_exchange_symbol_raw_em(self) -> list:
         url = "https://futsse-static.eastmoney.com/redis"
         params = {"msgid": "gnweb"}
-        r = requests.get(url, params=params)
+        r = requests.get(url, params=params, timeout=30)
         data_json = r.json()
         all_exchange_symbol_list = []
         for item in data_json:
             params = {"msgid": str(item["mktid"])}
-            r = requests.get(url, params=params)
+            r = requests.get(url, params=params, timeout=30)
             inner_data_json = r.json()
             for num in range(1, len(inner_data_json) + 1):
                 params = {"msgid": str(item["mktid"]) + f"_{num}"}
-                r = requests.get(url, params=params)
+                r = requests.get(url, params=params, timeout=30)
                 inner_data_json = r.json()
                 all_exchange_symbol_list.extend(inner_data_json)
         return all_exchange_symbol_list
